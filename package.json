@@ -1,0 +1,9 @@
+{
+  "name": "embers",
+  "version": "1.0.0",
+  "description": "Embers — UBC Christian Business Community",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  }
+}
