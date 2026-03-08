@@ -1,5 +1,6 @@
 /* ============================================================
-   EMBERS — Landing Page Styles
+   EMBERS — Immersive Watercolor Redesign
+   "Walking the Path" — Scrolling watercolor background
    ============================================================ */
 
 /* Custom Properties */
@@ -20,8 +21,7 @@
   --radius:      12px;
   --max-w:       1140px;
   --pad-h:       clamp(20px, 5vw, 56px);
-  --pad-v:       clamp(44px, 6vw, 72px);
-  --bar-height:  36px;
+  --pad-v:       clamp(56px, 8vw, 96px);
 }
 
 /* ============================================================
@@ -34,6 +34,11 @@
   padding: 0;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -41,10 +46,17 @@ html {
 body {
   font-family: var(--font-sans);
   color: var(--text);
-  background: var(--white);
+  background-color: var(--cream);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Scrolling watercolor background */
+  background-image: url('images/lighthouse.png');
+  background-attachment: scroll;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
 }
 
 img {
@@ -61,25 +73,16 @@ a {
    UTILITIES
    ============================================================ */
 
-.container {
-  max-width: var(--max-w);
-  margin: 0 auto;
-  padding: 0 var(--pad-h);
-}
-
 .section-label {
   font-family: var(--font-sans);
   font-size: 0.7rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--orange);
   display: block;
   margin-bottom: 16px;
-}
-
-.section-label--light {
-  color: var(--yellow);
+  text-shadow: 0 1px 8px rgba(243, 108, 30, 0.25);
 }
 
 .section-heading {
@@ -87,12 +90,8 @@ a {
   font-size: clamp(1.8rem, 3vw, 2.4rem);
   font-weight: 700;
   line-height: 1.15;
-  color: var(--text);
+  color: var(--brown-dark);
   margin-bottom: 24px;
-}
-
-.section-heading--light {
-  color: var(--white);
 }
 
 /* ============================================================
@@ -123,29 +122,6 @@ a {
   box-shadow: 0 10px 28px rgba(243, 108, 30, 0.32);
 }
 
-.btn-outline {
-  background: transparent;
-  color: var(--text);
-  border: 1.5px solid rgba(28, 20, 12, 0.5);
-}
-
-.btn-outline:hover {
-  background: var(--text);
-  color: var(--white);
-  border-color: var(--text);
-}
-
-.btn-orange {
-  background: var(--orange);
-  color: var(--white);
-}
-
-.btn-orange:hover {
-  background: var(--orange-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(243, 108, 30, 0.4);
-}
-
 /* ============================================================
    SCROLL REVEAL
    ============================================================ */
@@ -167,47 +143,12 @@ a {
 .reveal-delay-4 { transition-delay: 0.44s; }
 
 /* ============================================================
-   ANNOUNCE BAR
-   ============================================================ */
-
-.announce-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--bar-height);
-  z-index: 102;
-  background: var(--yellow);
-  color: var(--brown-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  font-family: var(--font-sans);
-  font-size: 0.78rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-}
-
-.announce-bar a {
-  font-weight: 600;
-  color: var(--brown-dark);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  transition: opacity 0.2s;
-}
-
-.announce-bar a:hover {
-  opacity: 0.65;
-}
-
-/* ============================================================
    NAV
    ============================================================ */
 
 .nav {
   position: fixed;
-  top: var(--bar-height);
+  top: 0;
   left: 0;
   right: 0;
   z-index: 100;
@@ -216,10 +157,6 @@ a {
 }
 
 .nav.scrolled {
-  background: rgba(255, 252, 245, 0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 1px 0 rgba(43, 30, 15, 0.09);
   padding: 12px 0;
 }
 
@@ -238,7 +175,7 @@ a {
 }
 
 .nav-instagram {
-  color: var(--text);
+  color: var(--brown-dark);
   display: flex;
   align-items: center;
   transition: color 0.2s ease, transform 0.2s ease;
@@ -250,70 +187,53 @@ a {
 }
 
 /* ============================================================
-   HERO
+   HERO — Transparent, text over watercolor
    ============================================================ */
 
 .hero {
-  min-height: 88vh;
-  background: var(--cream);
+  min-height: 100vh;
+  background: transparent;
   display: flex;
   align-items: center;
-  padding: calc(var(--bar-height) + clamp(72px, 10vh, 100px)) var(--pad-h) clamp(48px, 7vh, 80px);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Warm radial glow behind headline */
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 10%;
-  left: -5%;
-  width: 700px;
-  height: 700px;
-  background: radial-gradient(
-    circle,
-    rgba(255, 227, 100, 0.22) 0%,
-    rgba(243, 108, 30, 0.06) 50%,
-    transparent 70%
-  );
-  pointer-events: none;
+  justify-content: center;
+  padding: clamp(100px, 14vh, 160px) var(--pad-h) clamp(60px, 8vh, 100px);
+  text-align: center;
 }
 
 .hero-inner {
   max-width: var(--max-w);
   margin: 0 auto;
   width: 100%;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: clamp(40px, 6vw, 80px);
-  align-items: center;
 }
 
 .hero-content {
-  max-width: 580px;
+  max-width: 640px;
+  margin: 0 auto;
 }
 
-/* Staggered entry animations for hero text */
 .hero-eyebrow {
   font-family: var(--font-sans);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--orange);
+  color: var(--brown-mid);
   margin-bottom: 14px;
+  text-shadow: 0 0 20px rgba(255, 248, 238, 0.9);
   opacity: 0;
   animation: fadeUp 0.9s ease 0.1s forwards;
 }
 
 .hero-headline {
   font-family: var(--font-serif);
-  font-size: clamp(2.6rem, 5vw, 4.4rem);
+  font-size: clamp(2.6rem, 5.5vw, 4.4rem);
   font-weight: 700;
   line-height: 1.06;
-  color: var(--text);
+  color: var(--brown-dark);
   margin-bottom: 18px;
+  text-shadow:
+    0 0 30px rgba(255, 248, 238, 0.8),
+    0 0 60px rgba(255, 248, 238, 0.5);
   opacity: 0;
   animation: fadeUp 0.9s ease 0.25s forwards;
 }
@@ -321,10 +241,11 @@ a {
 .hero-scripture {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
-  color: var(--text-mid);
+  font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+  color: var(--brown-mid);
   line-height: 1.6;
   margin-bottom: 16px;
+  text-shadow: 0 0 20px rgba(255, 248, 238, 0.9);
   opacity: 0;
   animation: fadeUp 0.9s ease 0.42s forwards;
 }
@@ -337,11 +258,14 @@ a {
 }
 
 .hero-body {
-  font-size: clamp(0.9rem, 1.4vw, 1rem);
-  color: var(--text-mid);
+  font-size: clamp(0.92rem, 1.4vw, 1.02rem);
+  color: var(--brown-mid);
   line-height: 1.72;
-  margin-bottom: 28px;
-  max-width: 440px;
+  margin-bottom: 32px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  text-shadow: 0 0 20px rgba(255, 248, 238, 0.9);
   opacity: 0;
   animation: fadeUp 0.9s ease 0.56s forwards;
 }
@@ -350,90 +274,111 @@ a {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
+  justify-content: center;
   opacity: 0;
   animation: fadeUp 0.9s ease 0.7s forwards;
 }
 
-/* Hero sticker art */
-.hero-art {
-  opacity: 0;
-  animation: fadeIn 1.1s ease 0.45s forwards;
-  flex-shrink: 0;
+/* ============================================================
+   PURPOSE & MISSION — Floating translucent panel
+   ============================================================ */
+
+.mission {
+  padding: 0 var(--pad-h);
+  margin-top: -4vh;
+  display: flex;
+  justify-content: center;
 }
 
-.hero-sticker {
-  width: clamp(170px, 20vw, 270px);
-  height: auto;
+.mission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 780px;
+  width: 100%;
+}
+
+.mission-panel {
+  background: rgba(255, 248, 238, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-radius: 20px;
-  animation: float 7s ease-in-out infinite;
-  filter: drop-shadow(0 18px 56px rgba(243, 108, 30, 0.22))
-          drop-shadow(0 4px 14px rgba(0, 0, 0, 0.08));
+  padding: clamp(24px, 3.5vw, 36px) clamp(22px, 3vw, 32px);
+  text-align: center;
+}
+
+.mission-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+  font-weight: 700;
+  color: var(--brown-dark);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.mission-panel p {
+  font-size: clamp(0.88rem, 1.2vw, 0.96rem);
+  line-height: 1.78;
+  color: var(--text-mid);
 }
 
 /* ============================================================
-   STORY
+   STORY — Floating translucent panel
    ============================================================ */
 
 .story {
-  background: var(--white);
   padding: var(--pad-v) var(--pad-h);
+  margin-top: clamp(80px, 14vw, 280px);
+  display: flex;
+  justify-content: center;
 }
 
-.story-inner {
-  max-width: var(--max-w);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(48px, 8vw, 108px);
-  align-items: center;
+.story-panel {
+  max-width: 620px;
+  width: 100%;
+  background: rgba(255, 248, 238, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: clamp(32px, 5vw, 52px) clamp(28px, 4vw, 48px);
 }
 
-.story-text p {
+.story-panel .section-heading {
+  color: var(--brown-dark);
+}
+
+.story-panel p {
   font-size: 0.97rem;
   line-height: 1.78;
   color: var(--text-mid);
   margin-bottom: 16px;
 }
 
-.story-text p:last-child {
+.story-panel p:last-of-type {
   margin-bottom: 0;
 }
 
-.story-visual {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image-slot {
-  width: 100%;
-  aspect-ratio: 4 / 3.6;
-  background: var(--cream);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border: 1px solid rgba(243, 108, 30, 0.1);
-}
-
-.story-placeholder-art {
-  width: 62%;
-  height: auto;
-  opacity: 0.32;
-}
-
 /* ============================================================
-   ACTIVITIES
+   ACTIVITIES — Translucent cards, transparent section
    ============================================================ */
 
 .activities {
-  background: var(--cream);
   padding: var(--pad-v) var(--pad-h);
 }
 
-.activities .container {
+.activities-inner {
   max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+.activities .section-label {
+  text-shadow: 0 0 20px rgba(255, 248, 238, 0.9);
+}
+
+.activities .section-heading {
+  text-shadow:
+    0 0 24px rgba(255, 248, 238, 0.8),
+    0 0 48px rgba(255, 248, 238, 0.4);
 }
 
 .activities-grid {
@@ -443,25 +388,27 @@ a {
   margin-top: 28px;
 }
 
-/* Base card */
+/* Base card — translucent parchment */
 .activity-card {
-  background: var(--white);
-  border-radius: var(--radius);
+  background: rgba(255, 248, 238, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
   padding: clamp(20px, 2.5vw, 28px);
-  border: 1px solid rgba(243, 108, 30, 0.08);
+  border: 1px solid rgba(42, 31, 20, 0.06);
   transition: transform 0.28s ease, box-shadow 0.28s ease;
 }
 
 .activity-card:not(.activity-card--featured):hover {
-  transform: translateY(-6px);
-  box-shadow: 0 18px 52px rgba(243, 108, 30, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(42, 31, 20, 0.1);
 }
 
 .activity-card h3 {
   font-family: var(--font-serif);
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text);
+  color: var(--brown-dark);
   margin-bottom: 12px;
   line-height: 1.25;
 }
@@ -475,24 +422,13 @@ a {
 /* Featured Panel Nights card */
 .activity-card--featured {
   grid-column: span 2;
-  background: var(--orange);
-  border-color: transparent;
-  display: flex;
-  align-items: flex-start;
-  gap: 32px;
-  position: relative;
-  overflow: hidden;
+  background: rgba(255, 248, 238, 0.7);
+  border: 1px solid rgba(243, 108, 30, 0.15);
 }
 
 .activity-card--featured:hover {
   transform: translateY(-4px);
-  box-shadow: 0 18px 52px rgba(243, 108, 30, 0.35);
-}
-
-.activity-card--featured .featured-text {
-  position: relative;
-  z-index: 1;
-  flex: 1;
+  box-shadow: 0 12px 36px rgba(243, 108, 30, 0.12);
 }
 
 .featured-label {
@@ -500,101 +436,46 @@ a {
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--orange);
   display: block;
   margin-bottom: 10px;
 }
 
 .activity-card--featured h3 {
-  color: var(--white);
+  color: var(--brown-dark);
   font-size: 1.5rem;
 }
 
 .activity-card--featured p {
-  color: rgba(255, 255, 255, 0.82);
-}
-
-/* Ghost art in featured card */
-.featured-art {
-  position: absolute;
-  right: -24px;
-  bottom: -24px;
-  width: 160px;
-  height: auto;
-  opacity: 0.16;
-  pointer-events: none;
-  z-index: 0;
+  color: var(--text-mid);
 }
 
 /* ============================================================
-   JOIN THE TEAM
-   ============================================================ */
-
-.join {
-  background: var(--brown-dark);
-  padding: var(--pad-v) var(--pad-h);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Ghost flame decoration */
-.join-decoration {
-  position: absolute;
-  right: -80px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: clamp(220px, 28vw, 400px);
-  height: auto;
-  opacity: 0.1;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.join .container {
-  position: relative;
-  z-index: 1;
-}
-
-.join-inner {
-  max-width: var(--max-w);
-  margin: 0 auto;
-  max-width: 620px;
-}
-
-.join-inner p {
-  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
-  line-height: 1.75;
-  color: rgba(255, 255, 255, 0.72);
-  margin-bottom: 28px;
-}
-
-/* ============================================================
-   SITE BOTTOM
+   SITE BOTTOM — Transparent
    ============================================================ */
 
 .site-bottom {
-  background: var(--brown-dark);
-  padding: 28px 24px;
+  padding: 36px 24px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .instagram-link {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--brown-mid);
   text-decoration: none;
   font-size: 0.85rem;
   font-weight: 400;
   letter-spacing: 0.05em;
+  text-shadow: 0 0 16px rgba(255, 248, 238, 0.9);
   transition: color 0.22s ease;
 }
 
 .instagram-link:hover {
-  color: var(--yellow);
+  color: var(--orange);
 }
 
 /* ============================================================
@@ -612,57 +493,15 @@ a {
   }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes float {
-  0%, 100% { transform: rotate(-8deg) translateY(0px);   }
-  50%       { transform: rotate(-8deg) translateY(-16px); }
-}
-
 /* ============================================================
    RESPONSIVE
    ============================================================ */
 
 @media (max-width: 920px) {
-  .hero-inner {
+  .mission-grid {
     grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .hero-content {
-    max-width: 100%;
-  }
-
-  .hero-body {
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .hero-ctas {
-    justify-content: center;
-  }
-
-  .hero-art {
-    display: flex;
-    justify-content: center;
-    order: -1;
-  }
-
-  .hero-sticker {
-    width: clamp(140px, 32vw, 200px);
-  }
-
-  .story-inner {
-    grid-template-columns: 1fr;
-    gap: 48px;
-  }
-
-  .story-visual {
-    order: -1;
+    max-width: 480px;
+    gap: 14px;
   }
 
   .activities-grid {
@@ -677,10 +516,6 @@ a {
 @media (max-width: 600px) {
   :root {
     --pad-v: 60px;
-  }
-
-  .hero-sticker {
-    width: 160px;
   }
 
   .activities-grid {
@@ -700,5 +535,11 @@ a {
   .btn {
     width: 100%;
     text-align: center;
+  }
+
+  .mission-panel,
+  .story-panel {
+    padding: 28px 22px;
+    border-radius: 14px;
   }
 }
