@@ -1,11 +1,26 @@
+'use client'
+
+import { useEffect, useRef } from 'react'
 import CalendarView from '@/components/CalendarView'
 
-export const metadata = {
-  title: 'Calendar — Embers UBC',
-  description: 'View upcoming Embers UBC events.',
-}
-
 export default function CalendarPage() {
+  const revealRefs = useRef<HTMLElement[]>([])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target) }
+      }),
+      { threshold: 0.1 }
+    )
+    revealRefs.current.forEach((el) => el && observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
+
+  const r = (el: HTMLElement | null) => {
+    if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el)
+  }
+
   return (
     <main>
 
@@ -15,8 +30,8 @@ export default function CalendarPage() {
         style={{ padding: 'clamp(120px,16vh,180px) clamp(20px,5vw,56px) clamp(48px,6vw,80px)' }}
       >
         <div style={{ maxWidth: '640px', margin: '0 auto' }}>
-          <span className="section-label" style={{textShadow: '0 1px 2px rgba(0,0,0,0.25)',}}>Events</span>
-          <h1 style={{
+          <span className="animate-hero-1 section-label" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.25)' }}>Events</span>
+          <h1 className="animate-hero-2" style={{
             fontFamily: 'var(--font-serif)',
             fontSize: 'clamp(2.4rem,5vw,4rem)',
             fontWeight: 700,
@@ -27,7 +42,7 @@ export default function CalendarPage() {
           }}>
             Event Calendar
           </h1>
-          <p style={{
+          <p className="animate-hero-3" style={{
             fontSize: 'clamp(0.92rem,1.4vw,1.02rem)',
             color: 'var(--brown-mid)',
             lineHeight: 1.72,
@@ -42,7 +57,7 @@ export default function CalendarPage() {
 
       {/* ── CALENDAR — frosted glass panel ── */}
       <section style={{ padding: '0 clamp(20px,5vw,56px) var(--pad-v)', display: 'flex', justifyContent: 'center' }}>
-        <div className="glass-panel" style={{ maxWidth: '1000px', width: '100%', padding: 'clamp(24px,4vw,40px)' }}>
+        <div ref={r} className="reveal glass-panel calendar-section-panel" style={{ maxWidth: '1000px', width: '100%', padding: 'clamp(24px,4vw,40px)' }}>
           <CalendarView />
         </div>
       </section>

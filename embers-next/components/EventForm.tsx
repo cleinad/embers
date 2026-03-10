@@ -180,8 +180,8 @@ export default function EventForm({ initial, onSuccess, onCancel }: EventFormPro
         </div>
       </div>
 
-      {/* Date / Time row */}
-      <div className="grid gap-4" style={{ gridTemplateColumns: '1fr auto auto' }}>
+      {/* Date / Time row — stacks to 1 col on mobile */}
+      <div className="event-form-datetime-grid">
         <div>
           <label className={labelClass} htmlFor="date">Date *</label>
           <input
@@ -203,8 +203,7 @@ export default function EventForm({ initial, onSuccess, onCancel }: EventFormPro
             type="time"
             value={form.start_time}
             onChange={handleChange}
-            className={inputClass(false)}
-            style={{ width: '120px' }}
+            className={`${inputClass(false)} event-form-time-input`}
           />
         </div>
         <div>
@@ -215,11 +214,10 @@ export default function EventForm({ initial, onSuccess, onCancel }: EventFormPro
             type="time"
             value={form.end_time}
             onChange={handleChange}
-            className={inputClass(!!fieldErrors.end_time)}
-            style={{ width: '120px' }}
+            className={`${inputClass(!!fieldErrors.end_time)} event-form-time-input`}
           />
           {fieldErrors.end_time && (
-            <span className={fieldErrorClass} style={{ display: 'block', whiteSpace: 'nowrap' }}>{fieldErrors.end_time}</span>
+            <span className={fieldErrorClass}>{fieldErrors.end_time}</span>
           )}
         </div>
       </div>

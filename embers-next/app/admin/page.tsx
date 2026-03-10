@@ -230,14 +230,14 @@ export default function AdminPage() {
 
       {/* Header — transparent over watercolor */}
       <section style={{ padding: 'clamp(100px,14vh,140px) clamp(20px,5vw,56px) clamp(32px,4vw,48px)' }}>
-        <div style={{ maxWidth: '1140px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '16px' }}>
+        <div className="admin-header-row" style={{ maxWidth: '1140px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '16px' }}>
           <div>
             <span className="section-label" style={{textShadow: '0 1px 2px rgba(0,0,0,0.25)',}}>Admin Dashboard</span>
             <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 700, color: 'var(--brown-dark)', textShadow: '0 0 30px rgba(255,248,238,0.8)' }}>
               Event Management
             </h1>
           </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div className="admin-action-buttons" style={{ display: 'flex', gap: '12px' }}>
             <button
               onClick={() => { setEditingEvent(null); setShowForm(true) }}
               style={{
@@ -315,7 +315,7 @@ export default function AdminPage() {
 
           {/* Event Form — frosted glass */}
           {showForm && (
-            <div className="glass-panel" style={{ padding: 'clamp(24px,4vw,40px)' }}>
+            <div className="glass-panel" style={{ padding: 'clamp(24px,4vw,40px)', overflow: 'hidden', width: '100%', boxSizing: 'border-box' }}>
               <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', fontWeight: 700, color: 'var(--brown-dark)', marginBottom: '24px' }}>
                 {editingEvent ? 'Edit Event' : 'Create New Event'}
               </h2>

@@ -141,6 +141,33 @@ a {
   transform: scale(1.1);
 }
 
+/* ── Hamburger / mobile nav ── */
+/* Desktop: show regular nav links, hide hamburger */
+.nav-desktop-links {
+  display: flex;
+}
+.nav-hamburger {
+  display: none !important;
+}
+/* Mobile menu overlay: hidden on desktop */
+.mobile-menu-overlay {
+  display: none !important;
+}
+
+@media (max-width: 767px) {
+  /* Hide desktop nav links, show hamburger */
+  .nav-desktop-links {
+    display: none !important;
+  }
+  .nav-hamburger {
+    display: flex !important;
+  }
+  /* Show mobile menu overlay (visibility/opacity controlled inline) */
+  .mobile-menu-overlay {
+    display: flex !important;
+  }
+}
+
 /* ── Instagram bottom link (CSS hover, no JS needed) ── */
 .instagram-bottom-link {
   display: flex;
@@ -187,17 +214,161 @@ a {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
   .activities-grid-responsive {
+    grid-template-columns: 1fr !important;
+    margin-top: 16px;
+  }
+  .activities-grid-responsive > div:first-child,
+  .activities-featured-card {
+    grid-column: span 1 !important;
+  }
+  /* Reduce the large top padding on the "What We Do" section on mobile */
+  .what-we-do-section {
+    padding-top: 32px !important;
+  }
+}
+
+/* ── Purpose/Mission grid on homepage ── */
+.purpose-mission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 780px;
+  width: 100%;
+}
+@media (max-width: 767px) {
+  .purpose-mission-grid {
     grid-template-columns: 1fr;
   }
-  .activities-grid-responsive > div:first-child {
-    grid-column: span 1;
+}
+
+/* ── EventForm date/time grid ── */
+.event-form-datetime-grid {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 16px;
+}
+.event-form-time-input {
+  width: 120px;
+}
+@media (max-width: 767px) {
+  .event-form-datetime-grid {
+    grid-template-columns: 1fr 1fr;
   }
-  .glass-panel,
-  .glass-panel-dark {
-    border-radius: 14px;
-    padding: 28px 22px !important;
+  .event-form-datetime-grid > div:first-child {
+    grid-column: span 2;
+  }
+  .event-form-time-input {
+    width: 100%;
+  }
+  /* Prevent admin content from overflowing on mobile */
+  main, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  /* Ensure the glass panel form fills properly without overflow */
+  .glass-panel {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  /* Event list rows: reduce horizontal padding on small screens */
+  .admin-event-row-inner {
+    padding: 14px 16px !important;
+  }
+}
+
+/* ── Admin dashboard header responsive ── */
+@media (max-width: 767px) {
+  .admin-header-row {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+  .admin-action-buttons {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+  }
+  .admin-action-buttons button {
+    flex: 1;
+  }
+  /* Event row in admin list: stack info + actions vertically */
+  .admin-event-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  .admin-event-actions {
+    align-self: flex-end;
+  }
+}
+
+/* ── General mobile spacing ── */
+@media (max-width: 767px) {
+  /* Reduce hero top padding so it's not too large on mobile */
+  .hero-section {
+    padding-top: clamp(90px, 18vh, 130px) !important;
+    padding-bottom: clamp(48px, 8vh, 80px) !important;
+  }
+
+  /* Tighter section spacing on mobile */
+  .section-heading {
+    font-size: clamp(1.6rem, 6vw, 2rem);
+    margin-bottom: 18px;
+  }
+
+  /* Calendar section: reduce side padding so calendar doesn't get too cramped */
+  .calendar-section-panel {
+    padding: clamp(14px, 3vw, 24px) !important;
+  }
+
+  /* Ensure the hero button row wraps nicely on small screens */
+  .hero-cta-row {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  .hero-cta-row a,
+  .hero-cta-row button {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* Admin event list: make date/meta wrap nicer */
+  .admin-event-meta {
+    flex-direction: column !important;
+    gap: 2px !important;
+  }
+
+  /* Pagination on mobile: fit on one line */
+  .pagination-row {
+    padding: 12px 16px !important;
+  }
+
+  /* Toast notification: full-width at bottom on mobile */
+  .toast-notification {
+    left: 16px !important;
+    right: 16px !important;
+    bottom: 16px !important;
+  }
+}
+
+/* ── FullCalendar mobile overrides ── */
+@media (max-width: 767px) {
+  .fc-toolbar {
+    flex-direction: column !important;
+    gap: 10px !important;
+    align-items: center !important;
+  }
+  .fc-toolbar-title {
+    font-size: 1rem !important;
+    text-align: center;
+  }
+  .fc-button-primary {
+    font-size: 0.72rem !important;
+    padding: 4px 8px !important;
   }
 }
 

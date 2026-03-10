@@ -26,7 +26,7 @@ export default function HomePage() {
 
       {/* ─── HERO — transparent over watercolor ─── */}
       <section
-        className="min-h-screen flex items-center justify-center text-center"
+        className="hero-section min-h-screen flex items-center justify-center text-center"
         style={{ padding: 'clamp(100px,14vh,160px) clamp(20px,5vw,56px) clamp(60px,8vh,100px)' }}
       >
         <div style={{ maxWidth: '640px', margin: '0 auto', width: '100%' }}>
@@ -127,9 +127,7 @@ export default function HomePage() {
 
       {/* ─── PURPOSE & MISSION — frosted glass panels over watercolor ─── */}
       <section style={{ padding: '0 clamp(20px,5vw,56px)', marginTop: '-4vh', display: 'flex', justifyContent: 'center' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', maxWidth: '780px', width: '100%' }}
-          className="grid-cols-1 sm:grid-cols-2"
-        >
+        <div className="purpose-mission-grid">
           <div ref={r} className="reveal reveal-delay-1 glass-panel text-center"
             style={{ padding: 'clamp(24px,3.5vw,36px) clamp(22px,3vw,32px)' }}
           >
@@ -181,7 +179,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── WHAT WE DO — frosted glass activity cards over watercolor ─── */}
-      <section style={{ padding: 'var(--pad-v) clamp(20px,5vw,56px)' }}>
+      <section className="what-we-do-section" style={{ padding: 'var(--pad-v) clamp(20px,5vw,56px)' }}>
         <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
           <span ref={r} className="reveal section-label" style={{ textShadow: '0 0 20px rgba(255,248,238,0.9)' }}>What We Do</span>
           <h2 ref={r} className="reveal reveal-delay-1 section-heading" style={{ textShadow: '0 0 24px rgba(255,248,238,0.8), 0 0 48px rgba(255,248,238,0.4)' }}>
@@ -189,11 +187,9 @@ export default function HomePage() {
           </h2>
 
           {/* Activities grid — 3 columns like original */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '14px', marginTop: '28px' }}
-            className="activities-grid-responsive"
-          >
+          <div className="activities-grid-responsive">
             {/* Featured — spans 2 cols */}
-            <div ref={r} className="reveal reveal-delay-1 glass-panel" style={{
+            <div ref={r} className="reveal reveal-delay-1 glass-panel activities-featured-card" style={{
               gridColumn: 'span 2',
               background: 'rgba(255,248,238,0.70)',
               border: '1px solid rgba(243,108,30,0.15)',

@@ -41,6 +41,15 @@ export default function CalendarView() {
   const [loading, setLoading] = useState(true)
   const [selectedEvent, setSelectedEvent] = useState<SelectedEvent | null>(null)
   const [search, setSearch] = useState('')
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   useEffect(() => {
     fetchEvents()
@@ -127,11 +136,11 @@ export default function CalendarView() {
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
-            headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay',
-            }}
+            headerToolbar={
+              isMobile
+                ? { left: 'prev,next', center: 'title', right: 'today' }
+                : { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay' }
+            }
             events={filteredEvents}
             eventClick={handleEventClick}
             height="auto"
