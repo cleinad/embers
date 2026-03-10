@@ -1,10 +1,10 @@
 # Embers UBC — Next.js Full-Stack App
 
-A modern full-stack web application for the Embers UBC Christian Business Community, built with Next.js 14 (App Router), Supabase, and Tailwind CSS.
+A modern full-stack web application for the Embers UBC Christian Business Community, built with Next.js 16 (App Router), Supabase, and Tailwind CSS.
 
 ## Tech Stack
 
-- **Frontend**: Next.js 14+ (App Router), React, Tailwind CSS
+- **Frontend**: Next.js 16 (App Router), React, Tailwind CSS
 - **Calendar**: FullCalendar React
 - **Backend**: Supabase (PostgreSQL + Auth + RLS)
 - **Deployment**: Vercel
@@ -32,7 +32,24 @@ A modern full-stack web application for the Embers UBC Christian Business Commun
 
 ---
 
+## Design & Animations
+
+The site uses a watercolor background with frosted-glass (`backdrop-filter`) content panels.
+
+All public pages share a consistent **load animation system**:
+
+- **Hero / page header** — label, title, and subtitle fade + slide up on load via CSS keyframe classes (`animate-hero-1` through `animate-hero-5`) with staggered delays.
+- **Content sections** — panels, cards, and images use `reveal` + `reveal-delay-*` classes driven by an `IntersectionObserver`, so elements animate in as they scroll into view.
+
+This pattern is applied consistently across `/`, `/calendar`, and `/about`.
+
+---
+
 ## Getting Started
+
+### Prerequisites
+
+- Node.js **≥ 20.9.0** (use `nvm use` — see `.nvmrc`)
 
 ### 1. Clone & Install
 
@@ -53,13 +70,7 @@ npm install
 
 ### 3. Configure Environment Variables
 
-Copy `.env.local.example` to `.env.local`:
-
-```bash
-cp .env.local.example .env.local
-```
-
-Fill in your Supabase credentials from **Settings > API**:
+Create `.env.local` in the `embers-next` directory:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
@@ -78,12 +89,12 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Pages
 
-| Route       | Description                                      |
-|-------------|--------------------------------------------------|
-| `/`         | Homepage — hero, purpose/mission, story, events  |
-| `/calendar` | Public dynamic calendar with event details       |
-| `/about`    | About page with story, purpose, activities       |
-| `/admin`    | Exec-only dashboard — login, CRUD for events     |
+| Route       | Description                                              |
+|-------------|----------------------------------------------------------|
+| `/`         | Homepage — hero, purpose/mission, story, events          |
+| `/calendar` | Public dynamic calendar with event details               |
+| `/about`    | About page — story, values, team photo                   |
+| `/admin`    | Exec-only dashboard — login, CRUD for events             |
 
 ---
 
