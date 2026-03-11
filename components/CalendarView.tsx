@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid/index.js'
 import timeGridPlugin from '@fullcalendar/timegrid/index.js'
@@ -94,6 +95,8 @@ export default function CalendarView() {
   }
 
   function handleEventClick(arg: EventClickArg) {
+    arg.jsEvent.preventDefault()
+    ;(arg.jsEvent.target as HTMLElement).blur()
     const ev = arg.event
     setSelectedEvent({
       id: ev.id,
@@ -148,10 +151,10 @@ export default function CalendarView() {
         </div>
       )}
 
-      {/* Event Detail Modal */}
-      {selectedEvent && (
+      {/* Event Detail Modal — portalled to body so it sits above all FC stacking contexts */}
+      {selectedEvent && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[rgba(42,31,20,0.45)] backdrop-blur-sm"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-[rgba(42,31,20,0.45)] backdrop-blur-sm"
           onClick={() => setSelectedEvent(null)}
         >
           <div
@@ -241,7 +244,8 @@ export default function CalendarView() {
               Close
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )

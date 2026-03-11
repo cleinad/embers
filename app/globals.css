@@ -450,3 +450,14 @@ a {
   background-color: var(--yellow) !important;
   border-color: var(--yellow) !important;
 }
+
+/* Remove dark selection/focus highlight when clicking an event */
+.fc-event-selected::after,
+.fc-event:focus::after {
+  display: none !important;
+}
+.fc-event-selected,
+.fc-event:focus {
+  outline: none !important;
+  box-shadow: 0 1px 4px rgba(230,120,50,0.10), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+}
