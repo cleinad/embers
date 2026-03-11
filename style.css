@@ -127,12 +127,17 @@ a {
    ============================================================ */
 
 .reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-ready {
   opacity: 0;
   transform: translateY(26px);
   transition: opacity 0.75s ease, transform 0.75s ease;
 }
 
-.reveal.visible {
+.reveal-ready.visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -228,7 +233,7 @@ a {
   font-family: var(--font-serif);
   font-size: clamp(2.6rem, 5.5vw, 4.4rem);
   font-weight: 700;
-  line-height: 1.06;
+  line-height: 1.4;
   color: var(--brown-dark);
   margin-bottom: 18px;
   text-shadow:
