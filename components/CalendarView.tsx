@@ -6,10 +6,11 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid/index.js'
 import timeGridPlugin from '@fullcalendar/timegrid/index.js'
 import interactionPlugin from '@fullcalendar/interaction/index.js'
-import { EventClickArg } from '@fullcalendar/core/index.js'
+import { EventClickArg, EventMountArg } from '@fullcalendar/core/index.js'
 import { supabase } from '@/lib/supabaseClient'
+import { SERIES_COLORS } from '@/components/SeriesPanel'
 
-interface Event {
+interface DbEvent {
   id: string
   title: string
   date: string
@@ -18,7 +19,12 @@ interface Event {
   host_name: string
   room: string
   description: string
+  series_id: string | null
   created_at: string
+}
+
+interface SeriesMap {
+  [id: string]: { title: string; color: string }
 }
 
 interface CalendarEvent {
@@ -26,25 +32,44 @@ interface CalendarEvent {
   title: string
   start: string
   end?: string
+  backgroundColor?: string
+  borderColor?: string
+  textColor?: string
+  classNames?: string[]
   extendedProps: {
     start_time: string
     end_time: string
     host_name: string
     room: string
     description: string
+    series_title: string | null
+    series_color: string | null
   }
 }
 
-interface SelectedEvent extends Event {}
+interface SelectedEvent {
+  id: string
+  title: string
+  date: string
+  start_time: string
+  end_time: string
+  host_name: string
+  room: string
+  description: string
+  series_title: string | null
+  series_color: string | null
+}
 
 export default function CalendarView() {
   const [events, setEvents] = useState<CalendarEvent[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState<SelectedEvent | null>(null)
   const [search, setSearch] = useState('')
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     const mq = window.matchMedia('(max-width: 767px)')
     setIsMobile(mq.matches)
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
@@ -68,29 +93,49 @@ export default function CalendarView() {
 
   async function fetchEvents() {
     setLoading(true)
-    const { data, error } = await supabase
-      .from('events')
-      .select('*')
-      .order('date', { ascending: true })
 
-    if (error) {
-      console.error('Error fetching events:', error)
-    } else {
-      const mapped: CalendarEvent[] = (data || []).map((ev: Event) => ({
+    const [eventsRes, seriesRes] = await Promise.all([
+      supabase.from('events').select('*').order('date', { ascending: true }),
+      supabase.from('series').select('id,title,color'),
+    ])
+
+    if (eventsRes.error) {
+      console.error('Error fetching events:', eventsRes.error)
+      setLoading(false)
+      return
+    }
+
+    const seriesMap: SeriesMap = {}
+    for (const s of (seriesRes.data ?? [])) {
+      seriesMap[s.id] = { title: s.title, color: s.color }
+    }
+
+      const mapped: CalendarEvent[] = (eventsRes.data as DbEvent[]).map((ev) => {
+      const series = ev.series_id ? seriesMap[ev.series_id] : null
+      const colorDef = series ? (SERIES_COLORS.find(c => c.key === series.color) ?? SERIES_COLORS[0]) : null
+      // Always set explicit bg/border so FC never falls back to its default blue
+      const bg = colorDef ? colorDef.calendarBg : '#d45a0a'
+      const border = colorDef ? colorDef.calendarBorder : '#a84208'
+      return {
         id: ev.id,
         title: ev.title,
         start: ev.start_time ? `${ev.date}T${ev.start_time}` : ev.date,
         end: ev.end_time ? `${ev.date}T${ev.end_time}` : undefined,
+        backgroundColor: bg,
+        borderColor: border,
+        textColor: '#ffffff',
         extendedProps: {
           start_time: ev.start_time,
           end_time: ev.end_time,
           host_name: ev.host_name,
           room: ev.room,
           description: ev.description,
+          series_title: series?.title ?? null,
+          series_color: series?.color ?? null,
         },
-      }))
-      setEvents(mapped)
-    }
+      }
+    })
+    setEvents(mapped)
     setLoading(false)
   }
 
@@ -107,7 +152,8 @@ export default function CalendarView() {
       host_name: ev.extendedProps.host_name,
       room: ev.extendedProps.room,
       description: ev.extendedProps.description,
-      created_at: '',
+      series_title: ev.extendedProps.series_title ?? null,
+      series_color: ev.extendedProps.series_color ?? null,
     })
   }
 
@@ -130,7 +176,13 @@ export default function CalendarView() {
         />
       </div>
 
-      {loading ? (
+      {/* Global FC tweaks — dot hidden, text padding */}
+      <style>{`
+        .fc-daygrid-event-dot { display: none !important; }
+        .fc-event-main { padding-left: 5px !important; }
+      `}</style>
+
+      {!mounted || loading ? (
         <div className="flex items-center justify-center py-20">
           <div className="w-10 h-10 border-4 border-[var(--orange)] border-t-transparent rounded-full animate-spin" />
         </div>
@@ -144,8 +196,27 @@ export default function CalendarView() {
                 ? { left: 'prev,next', center: 'title', right: 'today' }
                 : { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay' }
             }
+            eventColor="#d45a0a"
+            eventBorderColor="#a84208"
             events={filteredEvents}
             eventClick={handleEventClick}
+            eventDidMount={(arg: EventMountArg) => {
+              const seriesColor: string | null = arg.event.extendedProps.series_color
+              if (!seriesColor) return
+              const colorDef = SERIES_COLORS.find(c => c.key === seriesColor)
+              if (!colorDef) return
+              const el = arg.el as HTMLElement
+              // Use setProperty with 'important' to beat globals.css !important rules
+              el.style.setProperty('background', colorDef.calendarGlass, 'important')
+              el.style.setProperty('background-image', colorDef.calendarGlass, 'important')
+              el.style.setProperty('border-color', colorDef.calendarGlassBorder, 'important')
+              el.style.setProperty('color', colorDef.calendarGlassText, 'important')
+              // Update text children too
+              const titleEl = el.querySelector('.fc-event-title') as HTMLElement | null
+              const timeEl = el.querySelector('.fc-event-time') as HTMLElement | null
+              if (titleEl) titleEl.style.setProperty('color', colorDef.calendarGlassText, 'important')
+              if (timeEl) timeEl.style.setProperty('color', colorDef.calendarGlassText, 'important')
+            }}
             height="auto"
           />
         </div>
@@ -178,9 +249,19 @@ export default function CalendarView() {
               <h2 className="font-serif font-bold text-[var(--brown-dark)] text-2xl leading-tight">
                 {selectedEvent.title}
               </h2>
+              {selectedEvent.series_title && (() => {
+                const colorDef = selectedEvent.series_color
+                  ? (SERIES_COLORS.find(c => c.key === selectedEvent.series_color) ?? SERIES_COLORS[0])
+                  : SERIES_COLORS[0]
+                return (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', marginTop: '10px', padding: '3px 10px', borderRadius: '999px', background: colorDef.gradient, border: `1px solid ${colorDef.border}`, color: colorDef.text, fontSize: '0.78rem', fontWeight: 500, backdropFilter: 'blur(6px)' }}>
+                    {selectedEvent.series_title}
+                  </span>
+                )
+              })()}
             </div>
 
-            {/* Attributes */}
+            {/* Attributes — order: Date, Time, Room, Host, About */}
             <div className="space-y-3 text-sm text-[var(--text-mid)]" style={{ paddingBottom: '28px' }}>
               {selectedEvent.date && (
                 <div className="flex items-start gap-2">
@@ -197,16 +278,16 @@ export default function CalendarView() {
                   </span>
                 </div>
               )}
-              {selectedEvent.host_name && (
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-[var(--brown-dark)] w-20 shrink-0">Host</span>
-                  <span>{selectedEvent.host_name}</span>
-                </div>
-              )}
               {selectedEvent.room && (
                 <div className="flex items-start gap-2">
                   <span className="font-medium text-[var(--brown-dark)] w-20 shrink-0">Room</span>
                   <span>{selectedEvent.room}</span>
+                </div>
+              )}
+              {selectedEvent.host_name && (
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-[var(--brown-dark)] w-20 shrink-0">Host</span>
+                  <span>{selectedEvent.host_name}</span>
                 </div>
               )}
               {selectedEvent.description && (

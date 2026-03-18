@@ -2,6 +2,13 @@
 -- Embers UBC — Supabase Database Schema
 -- ============================================================
 
+-- SERIES TABLE
+create table if not exists series (
+  id     uuid primary key default gen_random_uuid(),
+  title  text not null,
+  color  text not null default 'orange'
+);
+
 -- EVENTS TABLE
 create table if not exists events (
   id          uuid primary key default gen_random_uuid(),
@@ -12,6 +19,7 @@ create table if not exists events (
   host_name   text,
   room        text,
   description text,
+  series_id   uuid references series(id) on delete set null,
   created_at  timestamp with time zone default now()
 );
 
@@ -25,7 +33,46 @@ create table if not exists exec_users (
 -- Row Level Security (RLS)
 -- ============================================================
 
--- Enable RLS on events
+-- ── Series ──
+
+alter table series enable row level security;
+
+create policy "Public can read series"
+  on series for select
+  using (true);
+
+create policy "Exec can insert series"
+  on series for insert
+  to authenticated
+  with check (
+    exists (
+      select 1 from exec_users
+      where email = auth.email()
+    )
+  );
+
+create policy "Exec can update series"
+  on series for update
+  to authenticated
+  using (
+    exists (
+      select 1 from exec_users
+      where email = auth.email()
+    )
+  );
+
+create policy "Exec can delete series"
+  on series for delete
+  to authenticated
+  using (
+    exists (
+      select 1 from exec_users
+      where email = auth.email()
+    )
+  );
+
+-- ── Events ──
+
 alter table events enable row level security;
 
 -- Public read: anyone can view events (for the calendar page)
@@ -66,7 +113,8 @@ create policy "Exec can delete events"
     )
   );
 
--- Enable RLS on exec_users
+-- ── Exec Users ──
+
 alter table exec_users enable row level security;
 
 -- Authenticated read: logged-in users can check exec_users
@@ -74,6 +122,13 @@ create policy "Authenticated can read exec_users"
   on exec_users for select
   to authenticated
   using (true);
+
+-- ============================================================
+-- Migration: add series_id to existing events table
+-- (Run this if the events table already exists without series_id)
+-- ============================================================
+-- alter table events
+--   add column if not exists series_id uuid references series(id) on delete set null;
 
 -- ============================================================
 -- Seed: Add your first exec member email

@@ -420,7 +420,7 @@ a {
   opacity: 1 !important;
 }
 
-/* Calendar events — glassy amber pill */
+/* Calendar events — default glassy orange; series events override via JS eventDidMount */
 .fc-event {
   background: rgba(245, 164, 106, 0.40) !important;
   background-image: linear-gradient(135deg, rgba(255,205,155,0.62) 0%, rgba(240,145,90,0.34) 100%) !important;

@@ -2,6 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabaseClient'
+import { SERIES_COLORS } from '@/components/SeriesPanel'
+
+interface SeriesOption {
+  id: string
+  title: string
+  color: string
+}
 
 interface EventData {
   id?: string
@@ -12,6 +19,7 @@ interface EventData {
   host_name: string
   room: string
   description: string
+  series_id?: string | null
 }
 
 interface EventFormProps {
@@ -50,12 +58,19 @@ export default function EventForm({ initial, onSuccess, onCancel }: EventFormPro
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof EventData, string>>>({})
+  const [seriesOptions, setSeriesOptions] = useState<SeriesOption[]>([])
 
   useEffect(() => {
     setForm(initial ?? empty)
     setError(null)
     setFieldErrors({})
   }, [initial])
+
+  useEffect(() => {
+    supabase.from('series').select('id,title,color').order('title', { ascending: true }).then(({ data }) => {
+      setSeriesOptions(data ?? [])
+    })
+  }, [])
 
   function validate(): boolean {
     const errs: Partial<Record<keyof EventData, string>> = {}
@@ -120,6 +135,7 @@ export default function EventForm({ initial, onSuccess, onCancel }: EventFormPro
       host_name: form.host_name.trim(),
       room: form.room.trim(),
       description: form.description.trim(),
+      series_id: form.series_id ?? null,
     }
 
     let result
@@ -180,6 +196,30 @@ export default function EventForm({ initial, onSuccess, onCancel }: EventFormPro
         </div>
       </div>
 
+      {/* Series — full width, own row */}
+      <div>
+        <label className={labelClass} htmlFor="series_id">Series</label>
+        <div className="flex items-center gap-2">
+          {form.series_id && (() => {
+            const sel = seriesOptions.find(s => s.id === form.series_id)
+            const col = sel ? (SERIES_COLORS.find(c => c.key === sel.color) ?? SERIES_COLORS[0]) : null
+            return col ? <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: col.solid, flexShrink: 0, boxShadow: '0 1px 3px rgba(0,0,0,0.18)' }} /> : null
+          })()}
+          <select
+            id="series_id"
+            value={form.series_id ?? ''}
+            onChange={e => setForm(prev => ({ ...prev, series_id: e.target.value || null }))}
+            className={`${inputClass(false)} cursor-pointer`}
+          >
+            <option value="">None</option>
+            {seriesOptions.map(s => {
+              const col = SERIES_COLORS.find(c => c.key === s.color) ?? SERIES_COLORS[0]
+              return <option key={s.id} value={s.id}>{col.label} — {s.title}</option>
+            })}
+          </select>
+        </div>
+      </div>
+
       {/* Date / Time row — stacks to 1 col on mobile */}
       <div className="event-form-datetime-grid">
         <div>
@@ -222,53 +262,53 @@ export default function EventForm({ initial, onSuccess, onCancel }: EventFormPro
         </div>
       </div>
 
-      {/* Host Name */}
-      <div>
-        <label className={labelClass} htmlFor="host_name">Host Name</label>
-        <input
-          id="host_name"
-          name="host_name"
-          type="text"
-          value={form.host_name}
-          onChange={handleChange}
-          placeholder="Who is hosting this event?"
-          maxLength={LIMITS.host_name + 20}
-          className={inputClass(!!fieldErrors.host_name)}
-        />
-        <div className="flex justify-between items-start mt-1">
-          {fieldErrors.host_name
-            ? <span className={fieldErrorClass}>{fieldErrors.host_name}</span>
-            : <span />}
-          {(hostCount.near || hostCount.over) && (
-            <span className={charHintClass(hostCount.over, hostCount.near)}>
-              {hostCount.over ? `${-hostCount.remaining} over limit` : `${hostCount.remaining} left`}
-            </span>
-          )}
+      {/* Host Name + Room — two equal columns */}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass} htmlFor="host_name">Host Name</label>
+          <input
+            id="host_name"
+            name="host_name"
+            type="text"
+            value={form.host_name}
+            onChange={handleChange}
+            placeholder="Who is hosting?"
+            maxLength={LIMITS.host_name + 20}
+            className={inputClass(!!fieldErrors.host_name)}
+          />
+          <div className="flex justify-between items-start mt-1">
+            {fieldErrors.host_name
+              ? <span className={fieldErrorClass}>{fieldErrors.host_name}</span>
+              : <span />}
+            {(hostCount.near || hostCount.over) && (
+              <span className={charHintClass(hostCount.over, hostCount.near)}>
+                {hostCount.over ? `${-hostCount.remaining} over limit` : `${hostCount.remaining} left`}
+              </span>
+            )}
+          </div>
         </div>
-      </div>
-
-      {/* Room */}
-      <div>
-        <label className={labelClass} htmlFor="room">Room / Location</label>
-        <input
-          id="room"
-          name="room"
-          type="text"
-          value={form.room}
-          onChange={handleChange}
-          placeholder="e.g. Henry Angus 354"
-          maxLength={LIMITS.room + 20}
-          className={inputClass(!!fieldErrors.room)}
-        />
-        <div className="flex justify-between items-start mt-1">
-          {fieldErrors.room
-            ? <span className={fieldErrorClass}>{fieldErrors.room}</span>
-            : <span />}
-          {(roomCount.near || roomCount.over) && (
-            <span className={charHintClass(roomCount.over, roomCount.near)}>
-              {roomCount.over ? `${-roomCount.remaining} over limit` : `${roomCount.remaining} left`}
-            </span>
-          )}
+        <div>
+          <label className={labelClass} htmlFor="room">Room / Location</label>
+          <input
+            id="room"
+            name="room"
+            type="text"
+            value={form.room}
+            onChange={handleChange}
+            placeholder="e.g. Henry Angus 354"
+            maxLength={LIMITS.room + 20}
+            className={inputClass(!!fieldErrors.room)}
+          />
+          <div className="flex justify-between items-start mt-1">
+            {fieldErrors.room
+              ? <span className={fieldErrorClass}>{fieldErrors.room}</span>
+              : <span />}
+            {(roomCount.near || roomCount.over) && (
+              <span className={charHintClass(roomCount.over, roomCount.near)}>
+                {roomCount.over ? `${-roomCount.remaining} over limit` : `${roomCount.remaining} left`}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -298,6 +338,7 @@ export default function EventForm({ initial, onSuccess, onCancel }: EventFormPro
           </span>
         </div>
       </div>
+
 
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">
