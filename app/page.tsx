@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
+import ImageCarousel from '@/components/ImageCarousel'
 
 export default function HomePage() {
   const revealRefs = useRef<HTMLElement[]>([])
@@ -147,17 +148,23 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ─── PHOTO CAROUSEL — below Purpose & Mission ─── */}
+      <section style={{ padding: 'clamp(24px,4vw,48px) clamp(20px,5vw,56px)', display: 'flex', justifyContent: 'center' }}>
+        <div style={{ maxWidth: '780px', width: '100%' }}>
+          <ImageCarousel />
+        </div>
+      </section>
+
       {/* ─── STORY — frosted glass panel over watercolor ─── */}
       <section
         id="story"
         style={{
           padding: 'var(--pad-v) clamp(20px,5vw,56px)',
-          marginTop: 'clamp(80px,14vw,280px)',
           display: 'flex',
           justifyContent: 'center',
         }}
       >
-        <div ref={r} className="reveal glass-panel" style={{ maxWidth: '620px', width: '100%', padding: 'clamp(32px,5vw,52px) clamp(28px,4vw,48px)' }}>
+        <div ref={r} className="reveal glass-panel" style={{ maxWidth: '780px', width: '100%', padding: 'clamp(12px,2vw,20px) clamp(28px,4vw,48px) clamp(32px,5vw,52px)' }}>
           <span className="section-label reveal">Our Story</span>
           <h2 ref={r} className="reveal reveal-delay-1 section-heading">
             Students with a heart for The Lord
