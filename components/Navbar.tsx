@@ -37,6 +37,10 @@ export default function Navbar() {
     { href: '/about', label: 'About' },
   ]
 
+  // Pages with a dark brown background — use white logo & white links when not scrolled
+  const darkBgPages = ['/calendar', '/about']
+  const useDarkBg = darkBgPages.includes(pathname) && !scrolled && !menuOpen
+
   return (
     <>
       <nav
@@ -56,11 +60,11 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center shrink-0" onClick={() => setMenuOpen(false)}>
             <Image
-              src="/images/emberslogo.png"
+              src={useDarkBg ? '/images/emberslogowhite.png' : '/images/emberslogo.png'}
               alt="Embers"
               width={120}
               height={42}
-              style={{ height: '42px', width: 'auto' }}
+              style={{ height: '42px', width: 'auto', transition: 'opacity 0.3s ease' }}
               priority
             />
           </Link>
@@ -80,7 +84,11 @@ export default function Navbar() {
                     fontFamily: 'var(--font-sans)',
                     fontWeight: isActive ? 500 : 400,
                     letterSpacing: '0.02em',
-                    color: isActive ? 'var(--orange)' : 'var(--brown-mid)',
+                    color: isActive
+                      ? 'var(--orange)'
+                      : useDarkBg
+                        ? 'rgba(255,248,238,0.85)'
+                        : 'var(--brown-mid)',
                     background: isActive ? 'rgba(243,108,30,0.10)' : 'transparent',
                     transition: 'color 0.2s ease, background 0.2s ease',
                     textDecoration: 'none',
@@ -99,7 +107,7 @@ export default function Navbar() {
               rel="noopener noreferrer"
               aria-label="Follow Embers on Instagram"
               className="nav-instagram-icon"
-              style={{ marginLeft: '8px', color: 'var(--brown-dark)', display: 'flex', alignItems: 'center' }}
+              style={{ marginLeft: '8px', color: useDarkBg ? 'rgba(255,248,238,0.85)' : 'var(--brown-dark)', display: 'flex', alignItems: 'center' }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
@@ -136,7 +144,7 @@ export default function Navbar() {
                 display: 'block',
                 width: '22px',
                 height: '2px',
-                background: 'var(--brown-dark)',
+                background: useDarkBg ? 'rgba(255,248,238,0.9)' : 'var(--brown-dark)',
                 borderRadius: '2px',
                 transition: 'transform 0.3s ease, opacity 0.3s ease',
                 transform: menuOpen ? 'translateY(7px) rotate(45deg)' : 'none',
@@ -147,7 +155,7 @@ export default function Navbar() {
                 display: 'block',
                 width: '22px',
                 height: '2px',
-                background: 'var(--brown-dark)',
+                background: useDarkBg ? 'rgba(255,248,238,0.9)' : 'var(--brown-dark)',
                 borderRadius: '2px',
                 transition: 'opacity 0.3s ease',
                 opacity: menuOpen ? 0 : 1,
@@ -158,7 +166,7 @@ export default function Navbar() {
                 display: 'block',
                 width: '22px',
                 height: '2px',
-                background: 'var(--brown-dark)',
+                background: useDarkBg ? 'rgba(255,248,238,0.9)' : 'var(--brown-dark)',
                 borderRadius: '2px',
                 transition: 'transform 0.3s ease, opacity 0.3s ease',
                 transform: menuOpen ? 'translateY(-7px) rotate(-45deg)' : 'none',

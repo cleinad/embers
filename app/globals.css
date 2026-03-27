@@ -34,6 +34,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -43,8 +44,9 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 
-  /* Watercolor background — same as embers/index.html */
+  /* Watercolor background */
   background-image: url('/images/lighthouse.png');
   background-attachment: scroll;
   background-size: cover;
@@ -229,17 +231,286 @@ a {
   }
 }
 
-/* ── Purpose/Mission grid on homepage ── */
-.purpose-mission-grid {
+/* ── Mission strip ── */
+.mission-strip {
+  background: #110c08;
+  width: 100%;
+  padding: clamp(56px, 8vw, 96px) clamp(20px, 5vw, 56px);
+  position: relative;
+  z-index: 2;
+}
+.mission-strip-inner {
+  max-width: 1140px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: 1fr 420px;
+  gap: clamp(40px, 5vw, 72px);
+  align-items: center;
+}
+.mission-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.mission-label {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  display: block;
+  margin-bottom: 18px;
+}
+.mission-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.12;
+  color: #FFF8EE;
+  margin-bottom: 20px;
+}
+.mission-statement {
+  font-family: var(--font-sans);
+  font-size: clamp(0.92rem, 1.3vw, 1.02rem);
+  line-height: 1.82;
+  color: #c8b5a0;
+  margin-bottom: 28px;
+}
+.mission-divider {
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--orange) 0%, transparent 100%);
+  border-radius: 2px;
+  margin-bottom: 20px;
+}
+.mission-verse {
+  font-family: var(--font-serif);
+  font-size: 0.92rem;
+  color: #a08878;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mission-verse-ref {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: #7a6558;
+}
+.mission-carousel-col {
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.45);
+}
+
+/* mission grid responsive — inline grid can't do media queries */
+@media (max-width: 900px) {
+  .mission-grid {
+    grid-template-columns: 1fr !important;
+  }
+  /* Image carousel drops below the text on mobile */
+  .mission-grid > div:last-child {
+    max-width: 520px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+/* ── Story strip ── */
+.story-strip {
+  background: #1a1108;
+  width: 100%;
+  padding: clamp(56px, 8vw, 96px) clamp(20px, 5vw, 56px);
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid rgba(248,110,23,0.08);
+}
+.story-strip-inner {
   max-width: 780px;
+  margin: 0 auto;
   width: 100%;
 }
+.story-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 8px;
+}
+.story-text {
+  font-size: clamp(0.92rem, 1.3vw, 0.99rem);
+  line-height: 1.82;
+  color: #b8a090;
+}
+
+/* ── What We Do strip ── */
+.what-we-do-strip {
+  background: #211508;
+  width: 100%;
+  padding: clamp(56px, 8vw, 96px) clamp(20px, 5vw, 56px);
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid rgba(248,110,23,0.08);
+}
+
+/* ── Activity cards (dark style) ── */
+.activity-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(248, 110, 23, 0.14);
+  border-radius: 14px;
+  padding: clamp(20px, 2.5vw, 28px);
+  transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+}
+.activity-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+.activity-card-featured {
+  background: rgba(248, 110, 23, 0.07);
+  border-color: rgba(248, 110, 23, 0.22);
+}
+.activity-card-tag {
+  font-family: var(--font-sans);
+  font-size: 0.63rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--orange);
+  display: block;
+  margin-bottom: 10px;
+}
+.activity-card-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+  font-weight: 700;
+  color: #f0dfc8;
+  margin-bottom: 12px;
+  line-height: 1.25;
+}
+.activity-card-desc {
+  font-size: 0.92rem;
+  line-height: 1.76;
+  color: #9a8070;
+}
+
+/* ── Light section labels/headings for dark strips ── */
+.section-label-light {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  display: block;
+  margin-bottom: 16px;
+}
+.section-heading-light {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: #FFF8EE;
+  margin-bottom: 8px;
+}
+
+/* ── Footer strip (legacy) ── */
+.footer-strip {
+  background: #110c08;
+  border-top: 1px solid rgba(255,248,238,0.05);
+}
+
+/* ── Professional footer ── */
+.footer-main-row {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: clamp(32px, 5vw, 80px);
+  align-items: start;
+  padding-bottom: clamp(36px, 5vw, 56px);
+}
+
+.footer-logo-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-nav-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 100px;
+}
+
+.footer-nav-link {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: rgba(200, 168, 136, 0.75);
+  text-decoration: none;
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease;
+}
+.footer-nav-link:hover {
+  color: var(--orange-accent);
+}
+
+.footer-social-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 120px;
+}
+
+/* Social icon buttons */
+.footer-social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(248, 110, 23, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(200, 168, 136, 0.75);
+  text-decoration: none;
+  transition: color 0.22s ease, border-color 0.22s ease, background 0.22s ease, transform 0.22s ease;
+}
+.footer-social-icon:hover {
+  color: var(--orange-accent);
+  border-color: rgba(248, 110, 23, 0.52);
+  background: rgba(248, 110, 23, 0.10);
+  transform: scale(1.10);
+}
+
+/* Bottom divider + copyright */
+.footer-bottom-bar {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 18px 0 24px;
+  border-top: 1px solid rgba(248, 110, 23, 0.10);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: rgba(200, 168, 136, 0.35);
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+}
+
+/* Footer responsive */
 @media (max-width: 767px) {
-  .purpose-mission-grid {
+  .footer-main-row {
     grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: left;
+  }
+  .footer-logo-col,
+  .footer-nav-col,
+  .footer-social-col {
+    align-items: flex-start;
   }
 }
 
@@ -301,6 +572,16 @@ a {
   .admin-event-actions {
     align-self: flex-end;
   }
+}
+
+/* ── Hero section — watercolor background scoped here so it can't overflow ── */
+.hero-section {
+  background-image: url('/images/lighthouse.png');
+  background-attachment: scroll;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  overflow: hidden;
 }
 
 /* ── General mobile spacing ── */
@@ -452,6 +733,278 @@ a {
   .embla-arrow svg {
     width: 15px;
     height: 15px;
+  }
+}
+
+/* ── Event Carousel (What We Do section) ── */
+.event-carousel-root {
+  position: relative;
+  width: 100%;
+  padding-bottom: 52px; /* space for dots */
+}
+
+.event-carousel-clip {
+  /*
+   * No overflow clipping here at all.
+   * The parent <section> handles horizontal containment via its own width.
+   * This lets the card shadow breathe vertically without any hard cut line.
+   */
+  position: relative;
+}
+
+.event-carousel-viewport {
+  /* overflow: visible — shadow bleeds freely, no clipping */
+  overflow: visible;
+  width: 100%;
+}
+
+.event-carousel-container {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.event-carousel-slide {
+  /* 40% wide so adjacent cards are visible */
+  flex: 0 0 40%;
+  min-width: 0;
+  /* generous vertical padding so box-shadow on the active card isn't clipped */
+  padding: 28px 14px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── Event Card base ── */
+.event-card {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  border-radius: 14px;
+  /* NO overflow: hidden here — that clips both the shadow AND the tag badge.
+     The image wrapper has its own overflow: hidden + border-radius. */
+  cursor: pointer;
+  transition:
+    transform 0.48s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.48s ease,
+    box-shadow 0.48s ease,
+    filter 0.48s ease;
+  will-change: transform, opacity;
+  /* landscape — wider than tall */
+  aspect-ratio: 16 / 10;
+}
+
+/* Active (center) card — full size, fully lit */
+.event-card-active {
+  opacity: 1;
+  transform: scale(1);
+  /*
+   * Shallow shadow — kept close to the card so it doesn't extend
+   * beyond the slide's vertical padding and get clipped by the
+   * section boundary at the bottom.
+   */
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.28),
+    0 12px 28px rgba(0, 0, 0, 0.18);
+  filter: brightness(1);
+  z-index: 10;
+  cursor: default;
+}
+
+/* Adjacent (±1) cards — scaled down, faded */
+.event-card-adjacent {
+  opacity: 0.40;
+  transform: scale(0.87);
+  box-shadow: none;
+  filter: brightness(0.68) saturate(0.75);
+  z-index: 5;
+}
+
+.event-card-adjacent:hover {
+  opacity: 0.58;
+  filter: brightness(0.80) saturate(0.88);
+}
+
+/* Far cards — very faded */
+.event-card-far {
+  opacity: 0.15;
+  transform: scale(0.76);
+  box-shadow: none;
+  filter: brightness(0.52) saturate(0.6);
+  z-index: 1;
+}
+
+/* ── Card internals ── */
+.event-card-image-wrap {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.event-card-overlay {
+  position: absolute;
+  inset: 0;
+  /* dark gradient rising from bottom so text is always legible */
+  background: linear-gradient(
+    to top,
+    rgba(12, 4, 0, 0.88) 0%,
+    rgba(20, 8, 2, 0.60) 40%,
+    rgba(30, 10, 2, 0.22) 70%,
+    rgba(40, 12, 0, 0.06) 100%
+  );
+  border-radius: 18px;
+}
+
+.event-card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: clamp(20px, 3vw, 32px);
+  z-index: 2;
+}
+
+.event-card-tag {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #f5a46a;
+  background: rgba(248, 110, 23, 0.18);
+  border: 1px solid rgba(248, 110, 23, 0.35);
+  border-radius: 4px;
+  padding: 3px 9px;
+  margin-bottom: 10px;
+}
+
+.event-card-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+  font-weight: 700;
+  color: #FFF8EE;
+  line-height: 1.18;
+  margin-bottom: 10px;
+}
+
+.event-card-desc {
+  font-family: var(--font-sans);
+  font-size: clamp(0.82rem, 1.1vw, 0.92rem);
+  line-height: 1.68;
+  color: rgba(255, 230, 200, 0.80);
+  /* only show desc on active card */
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.4s ease 0.1s, max-height 0.4s ease;
+}
+
+/* Show desc only on active card */
+.event-card-active .event-card-desc {
+  opacity: 1;
+  max-height: 120px;
+}
+
+/* ── Arrows ── */
+.event-carousel-arrow {
+  position: absolute;
+  /*
+   * The root has padding-bottom: 52px for dots.
+   * We want the arrow centred on the slide area (not including dots).
+   * calc(50% - 26px) pulls us up by half the dots space.
+   */
+  top: calc(50% - 26px);
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 200, 140, 0.30);
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(255, 230, 200, 0.90);
+  cursor: pointer;
+  transition: background 0.22s ease, border-color 0.22s ease, color 0.22s ease, transform 0.22s ease;
+}
+
+.event-carousel-arrow:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 180, 100, 0.55);
+  color: #fff;
+  transform: translateY(-50%) scale(1.06);
+}
+
+.event-carousel-arrow-prev {
+  left: clamp(8px, 3vw, 32px);
+}
+
+.event-carousel-arrow-next {
+  right: clamp(8px, 3vw, 32px);
+}
+
+/* ── Dot indicators ── */
+.event-carousel-dots {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0;
+  z-index: 20;
+}
+
+.event-carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 220, 170, 0.30);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.25s ease, transform 0.25s ease, width 0.25s ease;
+}
+
+.event-carousel-dot:hover {
+  background: rgba(255, 220, 170, 0.55);
+}
+
+.event-carousel-dot-active {
+  background: rgba(255, 230, 180, 0.92);
+  width: 22px;
+  border-radius: 3px;
+  transform: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .event-carousel-slide {
+    flex: 0 0 54%;
+  }
+}
+
+@media (max-width: 600px) {
+  .event-carousel-slide {
+    flex: 0 0 80%;
+    padding: 12px 8px;
+  }
+  .event-card-adjacent {
+    opacity: 0.28;
+    transform: scale(0.88) translateZ(-30px);
+  }
+  .event-carousel-arrow {
+    width: 36px;
+    height: 36px;
+  }
+  .event-carousel-arrow svg {
+    width: 16px;
+    height: 16px;
   }
 }
 

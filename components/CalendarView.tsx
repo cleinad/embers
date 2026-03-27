@@ -85,10 +85,15 @@ export default function CalendarView() {
   useEffect(() => {
     if (selectedEvent) {
       document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
     }
-    return () => { document.body.style.overflow = '' }
+    return () => {
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+    }
   }, [selectedEvent])
 
   async function fetchEvents() {
@@ -187,7 +192,7 @@ export default function CalendarView() {
           <div className="w-10 h-10 border-4 border-[var(--orange)] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
-        <div className="bg-[rgba(255,248,238,0.8)] backdrop-blur-md rounded-2xl p-4 md:p-6 border border-[rgba(42,31,20,0.06)]">
+        <div className="bg-[rgba(255,248,238,0.8)] backdrop-blur-md rounded-2xl p-8 md:p-12 border border-[rgba(42,31,20,0.06)] overflow-hidden">
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
